@@ -23,14 +23,14 @@ setwd(dirname(current_path))
 
 #### 1.3 Input Data ----
 # Annotation Raw Data
-Annotation_Rawdata <- read_excel("~/Documents/Studium/01 Master/3. Semester/HPA/Placenta Project/Rawdata/List_C/Annotation_Rawdata.xlsx")%>%
+Annotation_Rawdata <- read_excel("Placenta_Rawdata/Annotation_Rawdata.xlsx")%>%
   rename(identifiers = ...1)  #rename column 1
 # Meta Data with Patient Information
-meta_data <- read_excel("~/Documents/Studium/01 Master/3. Semester/HPA/Placenta Project/Rawdata/patient_info.xlsx")
+meta_data <- read_excel("Placenta_Rawdata/patient_info.xlsx")
 # List of Trophoblast-specific Proteins (Manually Annotated due to lack of Annotation Data)
-tropho_man <- read_excel("~/Documents/Studium/01 Master/3. Semester/HPA/Placenta Project/Rawdata/troph_spec_manual.xlsx") 
+tropho_man <- read_excel("Placenta_Rawdata/troph_spec_manual.xlsx") 
 # List of Gene names (corresponding to Antibodies)
-gene_names <- read_excel("~/Documents/Studium/01 Master/3. Semester/HPA/Placenta Project/Rawdata/Genes.xlsx")
+gene_names <- read_excel("Placenta_Rawdata/Genes.xlsx")
 
 ###    2. DATA PREPERATION ----
 #### 2.1 Formatting ----
