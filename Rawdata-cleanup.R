@@ -18,6 +18,8 @@ library(ComplexUpset)
 #### 1.2 Work directory ----
 current_path <- rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path))
+dir.create("Output_tables")
+dir.create("Output_figures")
 
 #### 1.3 Input Data ----
 # Annotation Raw Data
