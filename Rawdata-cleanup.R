@@ -83,6 +83,8 @@ tissue_QC <- cleaned_data %>%
   mutate(Per_Missing = n/total_ab*100) %>%   
   #filter for those with more than 25% empty (treshold)
   filter(Per_Missing > 25)
+#export table
+write.table(tissue_QC, file = "Output_tables/Outlier_tissue.txt", sep = "\t", row.names = FALSE)
 
 #### 3.2 Figure QC Tissue ----
 TMA_Missing <- cleaned_data %>%
@@ -108,15 +110,13 @@ TMA_Missing %>%
         axis.ticks = element_blank(),
         axis.line = element_blank()) + 
   scale_colour_gradient(low = "#90CE90", high = "#FF99CC",limits = c(0, 100) ) 
-#export table
-write.table(tissue_QC, file = "Outlier_tissue.txt", sep = "\t")   
+
 
 #### 3.3 Remove outlier(s) from table ----
 filtered_tissue <- cleaned_data %>%                                 
   filter(!ID %in% tissue_QC$ID) 
 
 ###    4. QC AB ----
-
 #### 4.1 Find Outliers ----
 ab_QC_outliers <- filtered_tissue %>%
   #summarize antibodies into a group
@@ -130,8 +130,6 @@ ab_QC_outliers <- filtered_tissue %>%
   replace_na(list(Distinct = 0, Undistinct = 0, NAInt = 0)) %>%
   #treshold for AB to pass QC: at least 2 distinct stainings, define outliers
   filter(Distinct <2 )
-#export table
-write.table(ab_QC, file = "Outlier_ab.txt", sep = "\t")
 
 #### 4.2 Figure QC AB ----
 ab_QC <- filtered_tissue %>% 
@@ -141,6 +139,8 @@ ab_QC <- filtered_tissue %>%
   rename(NAInt = "<NA>") %>%
   replace_na(list(Distinct = 0, Undistinct = 0, NAInt = 0)) %>%
   gather(AB_qual, "count", 2:4)
+#export table
+write.table(ab_QC, file = "Output_tables/Outlier_ab.txt", sep = "\t", row.names = FALSE)
   
 #Order Antibodys based on number of distinct staining
 AB_order <- ab_QC %>%
@@ -166,10 +166,10 @@ ab_QC %>%
 filter_tiss_ab <- filtered_tissue %>% 
   filter(!Antibody %in% ab_QC_outliers$Antibody)
 #export final table with data cleaned for tissue & AB
-write.table(filter_tiss_ab, file = "superclean.txt", sep = "\t")
+write.table(filter_tiss_ab, file = "Output_tables/superclean.txt", sep = "\t", row.names = FALSE)
 
 ### 5. TROPHO SPEC ----
-#### 5.1 FindOutliers ----
+#### 5.1 Find Outliers ----
 # remove antibodies, that are not spec. for trophoblasts (= stain in DC)
 tropho_unspec <- filter_tiss_ab %>%
   filter(Celltype == "DC") %>%
@@ -183,7 +183,7 @@ tropho_spec <- filter_tiss_ab %>%
   filter(!Antibody %in% tropho_unspec$Antibody) %>%
   distinct(Antibody) 
 #export final table with data cleaned for tissue & AB
-write.table(tropho_spec, file = "tropho_spec.txt", sep = "\t", row.names = FALSE)
+write.table(tropho_spec, file = "Output_tables/tropho_spec.txt", sep = "\t", row.names = FALSE)
 
 #### 5.4 Incorporate Manual Annotation Data ----
 tspec_raw <- filter_tiss_ab %>%
@@ -204,14 +204,11 @@ set_EVT <- AB_Venn %>% filter(Celltype == "EVT") %>% pull(Antibody)
 # Venn plot
 grid.newpage()   
 myV <- plotVenn(list(SCT = set_SCT, CT = set_CT, EVT= set_EVT), nCycles = 2000 )
-showSVG(myV, opacity = 0.3, borderWidth = 2 , outFile = "Venn.tiff", labelRegions = FALSE,
+showSVG(myV, opacity = 0.3, borderWidth = 2 , outFile = "Output_figures/Venn.tiff", labelRegions = FALSE,
         setColor = c("#99CCFF", "#CC99FF","#FFCC99"))
 
 #### 6.2 Upset Plot - Trophoblast specific marker ----
 # create lists 
-set_SCT <- AB_Venn %>% filter(Celltype == "SCT") %>% pull(Antibody)
-set_CT <- AB_Venn %>% filter(Celltype == "CT") %>% pull(Antibody)
-set_EVT <- AB_Venn %>% filter(Celltype == "EVT") %>% pull(Antibody)
 ElevatedGenes <- list("SCT" = set_SCT, "CT" = set_CT, "EVT"= set_EVT)
 # Upset Plot
 upset(
