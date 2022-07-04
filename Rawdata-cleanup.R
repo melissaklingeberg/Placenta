@@ -27,7 +27,7 @@ Annotation_Rawdata <- read_excel("Placenta_Rawdata/Annotation_Rawdata.xlsx")%>%
 meta_data <- read_excel("Placenta_Rawdata/patient_info.xlsx")
 # List of Trophoblast-specific Proteins (Manually Annotated due to lack of Annotation Data)
 tropho_man <- read_excel("Placenta_Rawdata/troph_spec_manual.xlsx") 
-# List of Gene names (corresponding to Antibodies)
+# List of Gene Names (corresponding to Antibodies)
 gene_names <- read_excel("Placenta_Rawdata/Genes.xlsx")
 
 ###    2. DATA PREPERATION ----
