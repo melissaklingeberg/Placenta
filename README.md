@@ -1,4 +1,5 @@
 Immunohistochemical analysis of cell-type specific genes during placental development
+
 This script was created in the context of a 5-month student project at The Human Protein Atlas, with the aim to analyse placenta cell-type specific genes by tissue microarray-based immunohistochemistry to identify trophoblast specific marker. This code can be used as a basis to analyse annotation data from other experiments, identify candidates of interest and present the results graphically.
 
 Description:
